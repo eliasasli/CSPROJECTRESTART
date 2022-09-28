@@ -32,7 +32,13 @@ public class RegistrationForm extends JDialog{
 
         btnRegister.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {registerUser();}
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    registerUser();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
         });
 
 
@@ -84,7 +90,7 @@ private void registerUser() throws SQLException {
     private String addUserToDatabase(String fname, String lname, String email, String password, String phone, String address) throws SQLException {
         User user = null;
 
-        Connection connection = DriverManager.getConnection("jdbc:ucanaccess://C://Users//EA210847//OneDrive - Reigate College//Computer Science NEA//DatabaseforCS//Database.accdb");
+        Connection connection = DriverManager.getConnection("jdbc:ucanaccess://C://Documents//Databaseyesyes.accdb");
         Statement statement = connection.createStatement();
         ResultSet resultset =  statement.executeQuery("Select * from Database");
         while (resultset.next())
@@ -93,7 +99,7 @@ private void registerUser() throws SQLException {
         connection.close();
 
         try{
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C://Users//EA210847//OneDrive - Reigate College//Computer Science NEA//DatabaseforCS//Database.accdb");
+            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C://Documents//Databaseyesyes.accdb");
 
             Statement stmt = conn.createStatement();
             String sql = "INSERT INTO `user`(`fname`, `lname`, `password`, `email`, `phone`, `address` ) VALUES (?, ?, ?, ?, ?, ?)";
@@ -111,7 +117,7 @@ private void registerUser() throws SQLException {
             if (addedRows > 0) {
                 user = new User();
                 user.fname = fname;
-                user lname = lname;
+                user.lname = lname;
                 user.email = email;
                 user.phone = phone;
                 user.address = address;
@@ -123,7 +129,18 @@ private void registerUser() throws SQLException {
         }catch(Exception e){
             e.printStackTrace();
         }
-        System.out.println(k);
+        String user1 = String.valueOf(user);
+        return user1;
     }
-    }}}
+    public static void main(String[] args) {
+        RegistrationForm myForm = new RegistrationForm(null);
+        User user = myForm.user;
+        if (user != null) {
+            System.out.println("Successful Registration of: " + user.fname + user.lname);
+
+        }
+        else {
+            System.out.println("registration Canceled");
+        }
+    }}
 
