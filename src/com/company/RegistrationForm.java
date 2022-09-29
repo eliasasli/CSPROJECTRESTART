@@ -35,8 +35,8 @@ public class RegistrationForm extends JDialog{
             public void actionPerformed(ActionEvent e) {
                 try {
                     registerUser();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
         });
@@ -51,7 +51,7 @@ public class RegistrationForm extends JDialog{
 
     }
 
-private void registerUser() throws SQLException {
+private void registerUser() throws Exception {
     String fname = this.fname.getText();
     String lname = this.lname.getText();
     String email = this.email.getText();
@@ -75,7 +75,8 @@ private void registerUser() throws SQLException {
                 JOptionPane.ERROR_MESSAGE);
         return;
     }
-    String k = addUserToDatabase(fname, lname, email, password, phone, address);
+
+    user = addUserToDatabase(fname, lname, email, password, phone, address);
     if (user != null) {
         dispose();
     }
@@ -87,19 +88,26 @@ private void registerUser() throws SQLException {
     }
 }
     public User user;
-    private String addUserToDatabase(String fname, String lname, String email, String password, String phone, String address) throws SQLException {
+    private User addUserToDatabase(String fname, String lname, String email, String password, String phone, String address) throws Exception {
         User user = null;
 
-        Connection connection = DriverManager.getConnection("jdbc:ucanaccess://C://Documents//Databaseyesyes.accdb");
-        Statement statement = connection.createStatement();
-        ResultSet resultset =  statement.executeQuery("Select * from Database");
-        while (resultset.next())
-            System.out.println(resultset.getString(1) + "\t" + resultset.getString(2));
 
-        connection.close();
+
+           try{
+               Connection connection = DriverManager.getConnection("jdbc:ucanaccess\\C:\\Users\\EA210847\\IdeaProjects\\CSPROJECTRESTART\\Databaseyesyes.accdb");
+
+           Statement statement = connection.createStatement();
+           ResultSet resultset = statement.executeQuery("Select * from Database");
+           while (resultset.next())
+               System.out.println(resultset.getString(1) + "\t" + resultset.getString(2));
+
+           connection.close();
+    }
+        catch (Exception e) {
+        dispose();}
 
         try{
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C://Documents//Databaseyesyes.accdb");
+            Connection conn = DriverManager.getConnection("jdbc:ucanaccess\\C:\\Users\\EA210847\\IdeaProjects\\CSPROJECTRESTART\\Databaseyesyes.accdb");
 
             Statement stmt = conn.createStatement();
             String sql = "INSERT INTO `user`(`fname`, `lname`, `password`, `email`, `phone`, `address` ) VALUES (?, ?, ?, ?, ?, ?)";
@@ -129,8 +137,7 @@ private void registerUser() throws SQLException {
         }catch(Exception e){
             e.printStackTrace();
         }
-        String user1 = String.valueOf(user);
-        return user1;
+        return user;
     }
     public static void main(String[] args) {
         RegistrationForm myForm = new RegistrationForm(null);

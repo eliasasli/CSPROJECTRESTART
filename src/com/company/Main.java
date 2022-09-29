@@ -7,16 +7,29 @@ import java.sql.Statement;
 public class Main {
 
 
-    public static void main(String[] args) throws Exception {
+    public static void connection(String baseTableName, String MoveCodeTofind) {
+        int WantedMoveID = 0;
 
 
-            Connection connection = DriverManager.getConnection("jdbc:ucanaccess://C://Users//EA210847//OneDrive - Reigate College//Computer Science NEA//DatabaseforCS//Database.accdb");
-            Statement statement = connection.createStatement();
-            ResultSet resultset =  statement.executeQuery("Select * from Database");
-            while (resultset.next())
-                System.out.println(resultset.getString(1) + "\t" + resultset.getString(2));
+        String DatabaseLocation = System.getProperty("use.dir") + "\\NEA_Hexapawn.accdb";
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:ucanaccess\\C:\\Users\\EA210847\\IdeaProjects\\CSPROJECTRESTART\\Databaseyesyes.accdb");
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String sql = "Select * from Database" + baseTableName + ";";
+            ResultSet rs = statement.executeQuery(String.valueOf(sql));
+            while (rs.next()) {
+                String MoveCode = rs.getString("MoveCode");
+                if (MoveCode.equals(MoveCodeTofind)) {
+                    WantedMoveID = rs.getInt("MoveID");
+                }
+            }
+        } catch (Exception e) {
+            dispose();
 
-            connection.close();
+        }
+    }
 
-}
-}
+    private static void dispose() {
+
+    }
+    }
