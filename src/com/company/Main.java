@@ -7,29 +7,71 @@ import java.sql.Statement;
 public class Main {
 
 
-    public static void connection(String baseTableName, String MoveCodeTofind) {
-        int WantedMoveID = 0;
+    public static void main(String[] args) throws Exception {
 
 
-        String DatabaseLocation = System.getProperty("use.dir") + "\\NEA_Hexapawn.accdb";
-        try {
-            Connection connection = DriverManager.getConnection("jdbc:ucanaccess\\C:\\Users\\EA210847\\IdeaProjects\\CSPROJECTRESTART\\Databaseyesyes.accdb");
-            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String sql = "Select * from Database" + baseTableName + ";";
-            ResultSet rs = statement.executeQuery(String.valueOf(sql));
-            while (rs.next()) {
-                String MoveCode = rs.getString("MoveCode");
-                if (MoveCode.equals(MoveCodeTofind)) {
-                    WantedMoveID = rs.getInt("MoveID");
-                }
+
+
+
+
+    Connection connection = DriverManager.getConnection("jdbc:ucanaccess://Databaseyesyes.accdb");
+
+    Statement statement = connection.createStatement();
+    ResultSet resultset = statement.executeQuery("Select * from User");
+           while (resultset.next())
+                   System.out.println(resultset.getString(1) + "\t" + resultset.getString(2));
+
+           connection.close();
+
+
+
+    }}
+
+    public User user;
+    private User addUserToDatabase(String name, String email, String phone, String address, String password) throws Exception {
+        User user = null;
+
+        Connection connection = DriverManager.getConnection("jdbc:ucanaccess:/Databaseyesyes.accdb");
+
+        Statement statement = connection.createStatement();
+        ResultSet resultset = statement.executeQuery("Select * from User");
+        while (resultset.next())
+            System.out.println(resultset.getString(1) + "\t" + resultset.getString(2));
+
+        connection.close();
+
+
+
+        try{
+            Connection conn = DriverManager.getConnection(String.valueOf(con));
+
+            Statement stmt = conn.createStatement();
+            String sql = "INSERT INTO `User`(`fname`,`lname`, `email`, `password` , `phone`, `address`) VALUES (?, ?, ?, ?, ?, ?)";
+
+
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, fname);
+            preparedStatement.setString(2, lname);
+            preparedStatement.setString(3, email);
+            preparedStatement.setString(5, phone);
+            preparedStatement.setString(6, address);
+            preparedStatement.setString(4, password);
+
+            int addedRows = preparedStatement.executeUpdate();
+            if (addedRows > 0) {
+                user = new User();
+                user.name = fname;
+                user.name = lname;
+                user.email = email;
+                user.phone = phone;
+                user.address = address;
+                user.password = password;
             }
-        } catch (Exception e) {
-            dispose();
 
+            stmt.close();
+            conn.close();
+        }catch(Exception e){
+            e.printStackTrace();
         }
-    }
-
-    private static void dispose() {
-
-    }
+        return user;
     }

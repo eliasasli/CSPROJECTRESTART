@@ -97,7 +97,7 @@ private void registerUser() throws Exception {
                Connection connection = DriverManager.getConnection("jdbc:ucanaccess\\C:\\Users\\EA210847\\IdeaProjects\\CSPROJECTRESTART\\Databaseyesyes.accdb");
 
            Statement statement = connection.createStatement();
-           ResultSet resultset = statement.executeQuery("Select * from Database");
+           ResultSet resultset = statement.executeQuery("Select * from User");
            while (resultset.next())
                System.out.println(resultset.getString(1) + "\t" + resultset.getString(2));
 
